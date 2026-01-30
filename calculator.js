@@ -8,7 +8,20 @@ class Calculator {
       return 0;
     }
 
-    const numbers = input.split(/[,\n]/);
+    let delimiters = [',', '\n'];
+    let stringified = input;
+
+    // Requirement 6: Custom single character delimiter
+    if (input.startsWith('//')) {
+      const section = input.split('\n')[0];
+      stringified = input.substring(input.indexOf('\n') + 1);
+      delimiters = [section.substring(2)];
+    }
+
+    let numbers = [stringified];
+    for (const delimiter of delimiters) {
+      numbers = numbers.flatMap(n => n.split(delimiter));
+    }
 
     const parsed = numbers.map(n => {
       const trimmed = n.trim();

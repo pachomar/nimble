@@ -80,3 +80,19 @@ describe('Calculator - Requirement 5', () => {
     expect(calculator.add('1000,1001')).toBe(1000);
   });
 });
+
+describe('Calculator - Requirement 6', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('supports custom delimiter', () => {
+    expect(calculator.add('//#\n2#5')).toBe(7);
+  });
+
+  test('supports comma as custom delimiter', () => {
+    expect(calculator.add('//,\n2,ff,100')).toBe(102);
+  });
+});
