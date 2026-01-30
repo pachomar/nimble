@@ -65,12 +65,14 @@ console.log('\nEnter expressions (Ctrl+C to exit)');
 function promptUser() {
   rl.question('> ', (input) => {
     if (!input.trim()) {
-      console.log(`✓ Result: ${result}`);
+      promptUser();
       return;
     }
 
     try {
-      const result = calculator.add(input);
+      const trimmed = input.replace(/\\n/g, '\n');
+      const result = calculator.add(trimmed);
+
       console.log(`✓ Result: ${result}`);
       if (calculator.getFormula) {
         console.log(`  Formula: ${calculator.getFormula()}`);

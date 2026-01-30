@@ -4,13 +4,8 @@ class Calculator {
       return 0;
     }
 
-    const numbers = input.split(',');
-    
-    // Requirement 2: No maximum constraint removed
-    
-    // if (numbers.length > 2) {
-    //   throw new Error('Maximum of 2 numbers allowed');
-    // }
+    // Requirement 3: Support newline as delimiter
+    const numbers = input.split(/[,\n]/);
 
     const parsed = numbers.map(n => {
       const trimmed = n.trim();

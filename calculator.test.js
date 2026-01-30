@@ -33,6 +33,10 @@ describe('Calculator - Requirement 1', () => {
   });
 
   test('handles many numbers', () => {
-  expect(calculator.add('1,2,3,4,5,6,7,8,9,10,11,12')).toBe(78);
-});
+    expect(calculator.add('1,2,3,4,5,6,7,8,9,10,11,12')).toBe(78);
+  });
+
+  test('handles newline as delimiter', () => {
+    expect(calculator.add('1\n2,3')).toBe(6);
+  });
 });
