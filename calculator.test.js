@@ -32,7 +32,7 @@ describe('Calculator - Requirement 1', () => {
     expect(calculator.add('5,tytyt')).toBe(5);
   });
 
-  test('throws exception for more than 2 numbers', () => {
-    expect(() => calculator.add('1,2,3')).toThrow('Maximum of 2 numbers allowed');
-  });
+  test('handles many numbers', () => {
+  expect(calculator.add('1,2,3,4,5,6,7,8,9,10,11,12')).toBe(78);
+});
 });

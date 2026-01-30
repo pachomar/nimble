@@ -6,10 +6,11 @@ class Calculator {
 
     const numbers = input.split(',');
     
-    // Requirement 1: Maximum 2 numbers
-    if (numbers.length > 2) {
-      throw new Error('Maximum of 2 numbers allowed');
-    }
+    // Requirement 2: No maximum constraint removed
+    
+    // if (numbers.length > 2) {
+    //   throw new Error('Maximum of 2 numbers allowed');
+    // }
 
     const parsed = numbers.map(n => {
       const trimmed = n.trim();
