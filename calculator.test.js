@@ -108,3 +108,15 @@ describe('Calculator - Requirement 7', () => {
     expect(calculator.add('//[***]\n11***22***33')).toBe(66);
   });
 });
+
+describe('Calculator - Requirement 8', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('supports multiple delimiters', () => {
+    expect(calculator.add('//[*][!][r9r]\n11r9r22*hh*33!44')).toBe(110);
+  });
+});

@@ -15,12 +15,11 @@ class Calculator {
       const section = input.split('\n')[0];
       stringified = input.substring(input.indexOf('\n') + 1);
 
-      // Requirement 7: Multi-character delimiter with brackets
+      // Requirement 8: Multiple delimiters of any length
       if (section.includes('[')) {
-        const match = section.match(/\[([^\]]+)\]/);
-        
-        if (match) {
-          delimiters = [match[1]];
+        const matches = section.match(/\[([^\]]+)\]/g);
+        if (matches) {
+          delimiters = matches.map(d => d.slice(1, -1));
         }
       } else {
         delimiters = [section.substring(2)];
