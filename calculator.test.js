@@ -96,3 +96,15 @@ describe('Calculator - Requirement 6', () => {
     expect(calculator.add('//,\n2,ff,100')).toBe(102);
   });
 });
+
+describe('Calculator - Requirement 7', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('supports multi-character delimiter', () => {
+    expect(calculator.add('//[***]\n11***22***33')).toBe(66);
+  });
+});
