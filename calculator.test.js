@@ -11,10 +11,6 @@ describe('Calculator - Requirement 1', () => {
     expect(calculator.add('20')).toBe(20);
   });
 
-  test('two numbers comma delimited', () => {
-    expect(calculator.add('1,5000')).toBe(5001);
-  });
-
   test('empty input returns 0', () => {
     expect(calculator.add('')).toBe(0);
   });
@@ -66,5 +62,21 @@ describe('Calculator - Requirement 4', () => {
 
   test('throws exception with all negative numbers', () => {
     expect(() => calculator.add('1,-2,-3,4')).toThrow('Negative numbers not allowed: -2, -3');
+  });
+});
+
+describe('Calculator - Requirement 5', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('ignores numbers greater than 1000', () => {
+    expect(calculator.add('2,1001,6')).toBe(8);
+  });
+
+  test('includes 1000 but excludes 1001', () => {
+    expect(calculator.add('1000,1001')).toBe(1000);
   });
 });
