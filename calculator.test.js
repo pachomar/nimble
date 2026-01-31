@@ -120,3 +120,17 @@ describe('Calculator - Requirement 8', () => {
     expect(calculator.add('//[*][!][r9r]\n11r9r22*hh*33!44')).toBe(110);
   });
 });
+
+describe('Calculator - Stretch Goal 1', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('displays formula', () => {
+    const result = calculator.add('2,4,rrrr,1001,6');
+    expect(result).toBe(12);
+    expect(calculator.getFormula()).toBe('2+4+0+0+6 = 12');
+});
+});

@@ -1,10 +1,12 @@
 class Calculator {
   constructor() {
     this.upperBound = 1000;
+    this.formula = '';
   }
 
   add(input) {
     if (!input || input.trim() === '') {
+      this.formula = '0 = 0';
       return 0;
     }
 
@@ -44,10 +46,17 @@ class Calculator {
       throw new Error(`Negative numbers not allowed: ${negatives.join(', ')}`);
     }
 
-    // Requirement 5: Ignore numbers > 1000
-    return parsed
-      .filter(n => n <= this.upperBound)
-      .reduce((sum, n) => sum + n, 0);
+    // Stretch Goal 1: Display formula
+    const valid = parsed.map(n => n > this.upperBound ? 0 : n);
+    const result = valid.reduce((sum, n) => sum + n, 0);
+    
+    this.formula = `${valid.join('+')} = ${result}`;
+
+    return result;
+  }
+
+  getFormula() {
+    return this.formula;
   }
 }
 
