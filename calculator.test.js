@@ -132,5 +132,28 @@ describe('Calculator - Stretch Goal 1', () => {
     const result = calculator.add('2,4,rrrr,1001,6');
     expect(result).toBe(12);
     expect(calculator.getFormula()).toBe('2+4+0+0+6 = 12');
+  });
 });
+
+describe('Calculator - Stretch Goal 3', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('allows custom upper bound', () => {
+    const calc = new Calculator({ upperBound: 500 });
+    expect(calc.add('100,600,200')).toBe(300);
+  });
+
+  test('allows negatives when configured', () => {
+    const calc = new Calculator({ denyNegatives: false });
+    expect(calc.add('5,-3,2')).toBe(4);
+  });
+
+  test('allows custom alternate delimiter', () => {
+    const calc = new Calculator({ customDelimiter: ';' });
+    expect(calc.add('1;2;3')).toBe(6);
+  });
 });
