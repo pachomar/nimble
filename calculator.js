@@ -1,8 +1,9 @@
+const CustomDelimiterParser = require('./interfaces/parsers');
+
 class Calculator {
-constructor(config = {}) {
-    this.upperBound = config.upperBound !== undefined ? config.upperBound : 1000;
-    this.denyNegatives = config.denyNegatives !== undefined ? config.denyNegatives : true;
-    this.customDelimiter = config.customDelimiter || '\n';
+  constructor(parser = new CustomDelimiterParser(), validators = []) {
+    this.parser = parser;
+    this.validators = validators;
     this.formula = '';
   }
 
@@ -12,29 +13,14 @@ constructor(config = {}) {
       return 0;
     }
 
-    let delimiters = [',', this.customDelimiter];
-    let stringified = input;
-
-    if (input.startsWith('//')) {
-      const section = input.split('\n')[0];
-      stringified = input.substring(input.indexOf('\n') + 1);
-
-      if (section.includes('[')) {
-        const matches = section.match(/\[([^\]]+)\]/g);
-        if (matches) {
-          delimiters = matches.map(d => d.slice(1, -1));
-        }
-      } else {
-        delimiters = [section.substring(2)];
-      }
-    }
+    const { delimiters, stringified } = this.parser.parse(input);
 
     let numbers = [stringified];
     for (const delimiter of delimiters) {
       numbers = numbers.flatMap(n => n.split(delimiter));
     }
 
-    const parsed = numbers.map(n => {
+    let parsed = numbers.map(n => {
       const trimmed = n.trim();
       if (trimmed === '') return 0;
 	  
@@ -42,19 +28,12 @@ constructor(config = {}) {
       return isNaN(num) ? 0 : num;
     });
 
-    // Stretch Goal 3: Configurable negative denial
-    if (this.denyNegatives) {
-      const negatives = parsed.filter(n => n < 0);
-      if (negatives.length > 0) {
-        throw new Error(`Negative numbers not allowed: ${negatives.join(', ')}`);
-      }
+    for (const validator of this.validators) {
+      parsed = validator.validate(parsed);
     }
 
-    // Stretch Goal 3: Configurable upper bound
-    const valid = parsed.map(n => n > this.upperBound ? 0 : n);
-    const result = valid.reduce((sum, n) => sum + n, 0);
-    
-    this.formula = `${valid.join('+')} = ${result}`;
+    const result = parsed.reduce((sum, n) => sum + n, 0);
+    this.formula = `${parsed.join('+')} = ${result}`;
 
     return result;
   }

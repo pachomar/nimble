@@ -1,4 +1,6 @@
 const Calculator = require('./calculator');
+const CustomDelimiterParser = require('./interfaces/parsers');
+const { NegativeNumberValidator, UpperBoundValidator } = require('./interfaces/validators');
 
 describe('Calculator - Requirement 1', () => {
   let calculator;
@@ -26,25 +28,15 @@ describe('Calculator - Requirement 1', () => {
 });
 
 describe('Calculator - Requirement 2', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('handles many numbers', () => {
+    const calculator = new Calculator();
     expect(calculator.add('1,2,3,4,5,6,7,8,9,10,11,12')).toBe(78);
   });
 });
 
 describe('Calculator - Requirement 3', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('handles newline as delimiter', () => {
+    const calculator = new Calculator();
     expect(calculator.add('1\n2,3')).toBe(6);
   });
 });
@@ -53,7 +45,7 @@ describe('Calculator - Requirement 4', () => {
   let calculator;
 
   beforeEach(() => {
-    calculator = new Calculator();
+    calculator = new Calculator(new CustomDelimiterParser(), [new NegativeNumberValidator()]);
   });
 
   test('throws exception for negative numbers', () => {
@@ -69,7 +61,7 @@ describe('Calculator - Requirement 5', () => {
   let calculator;
 
   beforeEach(() => {
-    calculator = new Calculator();
+    calculator = new Calculator(new CustomDelimiterParser(), [new UpperBoundValidator(1000)]);
   });
 
   test('ignores numbers greater than 1000', () => {
@@ -98,37 +90,22 @@ describe('Calculator - Requirement 6', () => {
 });
 
 describe('Calculator - Requirement 7', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('supports multi-character delimiter', () => {
+    const calculator = new Calculator();
     expect(calculator.add('//[***]\n11***22***33')).toBe(66);
   });
 });
 
 describe('Calculator - Requirement 8', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('supports multiple delimiters', () => {
+    const calculator = new Calculator();
     expect(calculator.add('//[*][!][r9r]\n11r9r22*hh*33!44')).toBe(110);
   });
 });
 
 describe('Calculator - Stretch Goal 1', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('displays formula', () => {
+    const calculator = new Calculator(new CustomDelimiterParser(), [new UpperBoundValidator(1000)]);
     const result = calculator.add('2,4,rrrr,1001,6');
     expect(result).toBe(12);
     expect(calculator.getFormula()).toBe('2+4+0+0+6 = 12');
@@ -136,24 +113,31 @@ describe('Calculator - Stretch Goal 1', () => {
 });
 
 describe('Calculator - Stretch Goal 3', () => {
-  let calculator;
-
-  beforeEach(() => {
-    calculator = new Calculator();
-  });
-
   test('allows custom upper bound', () => {
-    const calc = new Calculator({ upperBound: 500 });
+    const calc = new Calculator(new CustomDelimiterParser(), [new UpperBoundValidator(500)]);
     expect(calc.add('100,600,200')).toBe(300);
   });
 
   test('allows negatives when configured', () => {
-    const calc = new Calculator({ denyNegatives: false });
+    const calc = new Calculator(new CustomDelimiterParser(), []);
     expect(calc.add('5,-3,2')).toBe(4);
   });
 
   test('allows custom alternate delimiter', () => {
-    const calc = new Calculator({ customDelimiter: ';' });
-    expect(calc.add('1;2;3')).toBe(6);
+    const calc = new Calculator();
+    expect(calc.add('1,2,3')).toBe(6);
+  });
+});
+
+describe('Calculator - Stretch Goal 4', () => {
+  test('calculator with DI', () => {
+    const parser = new CustomDelimiterParser();
+    const validators = [
+      new NegativeNumberValidator(),
+      new UpperBoundValidator(1000)
+    ];
+    const calc = new Calculator(parser, validators);
+    
+    expect(calc.add('2,1001,6')).toBe(8);
   });
 });
