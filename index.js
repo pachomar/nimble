@@ -1,12 +1,13 @@
 const readline = require('readline');
 const Calculator = require('./calculator');
+const CustomDelimiterParser = require('./interfaces/parsers');
+const { NegativeNumberValidator, UpperBoundValidator } = require('./interfaces/validators');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
 const config = {
   upperBound: 1000,
   denyNegatives: true,
-  alternateDelimiter: '\n'
 };
 
 // Parse arguments
@@ -46,7 +47,11 @@ Interactive Mode:
   }
 }
 
-const calculator = new Calculator(config);
+// Build validators based on config
+const validators = [];
+if (config.denyNegatives) validators.push(new NegativeNumberValidator());
+validators.push(new UpperBoundValidator(config.upperBound));
+const calculator = new Calculator(new CustomDelimiterParser(), validators);
 
 const rl = readline.createInterface({
   input: process.stdin,
