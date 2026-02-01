@@ -141,3 +141,30 @@ describe('Calculator - Stretch Goal 4', () => {
     expect(calc.add('2,1001,6')).toBe(8);
   });
 });
+
+describe('Calculator - Stretch Goal 5', () => {
+  let calculator;
+
+  beforeEach(() => {
+    calculator = new Calculator();
+  });
+
+  test('subtraction', () => {
+    expect(calculator.subtract('10,3,2')).toBe(5);
+    expect(calculator.getFormula()).toBe('10-3-2 = 5');
+  });
+
+  test('multiplication', () => {
+    expect(calculator.multiply('2,3,4')).toBe(24);
+    expect(calculator.getFormula()).toBe('2*3*4 = 24');
+  });
+
+  test('division', () => {
+    expect(calculator.divide('100,2,5')).toBe(10);
+    expect(calculator.getFormula()).toBe('100/2/5 = 10');
+  });
+
+  test('throws error on division by zero', () => {
+    expect(() => calculator.divide('10,0')).toThrow('Division by zero');
+  });
+});

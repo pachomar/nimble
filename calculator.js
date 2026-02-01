@@ -7,7 +7,8 @@ class Calculator {
     this.formula = '';
   }
 
-  add(input) {
+  // Stretch Goal 5: Configurable negative denial
+  calculate(input, operation = 'add') {
     if (!input || input.trim() === '') {
       this.formula = '0 = 0';
       return 0;
@@ -32,10 +33,49 @@ class Calculator {
       parsed = validator.validate(parsed);
     }
 
-    const result = parsed.reduce((sum, n) => sum + n, 0);
-    this.formula = `${parsed.join('+')} = ${result}`;
+    let result;
+    let symbol;
 
+    switch (operation) {
+      case 'subtract':
+        result = parsed.reduce((acc, n, i) => i === 0 ? n : acc - n);
+        symbol = '-';
+        break;
+      case 'multiply':
+        result = parsed.reduce((acc, n) => acc * n, 1);
+        symbol = '*';
+        break;
+      case 'divide':
+        result = parsed.reduce((acc, n, i) => {
+          if (i === 0) return n;
+          if (n === 0) throw new Error("Division by zero");
+          return acc / n;
+        });
+        symbol = '/';
+        break;
+      default: // add
+        result = parsed.reduce((sum, n) => sum + n, 0);
+        symbol = '+';
+    }
+
+    this.formula = `${parsed.join(symbol)} = ${result}`;
     return result;
+  }
+
+  add(input) {
+    return this.calculate(input, 'add');
+  }
+
+  subtract(input) {
+    return this.calculate(input, 'subtract');
+  }
+
+  multiply(input) {
+    return this.calculate(input, 'multiply');
+  }
+
+  divide(input) {
+    return this.calculate(input, 'divide');
   }
 
   getFormula() {
